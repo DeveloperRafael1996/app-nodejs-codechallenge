@@ -1,82 +1,123 @@
-# Yape Code Challenge :rocket:
+# Microservices Project With Kafka And NestJS
 
-Our code challenge will let you marvel us with your Jedi coding skills :smile:. 
+Yape project using a microservices architecture, implementing the Service and Repository pattern, with writes handled by Kafka and reads managed through GraphQL (GraphJS), integrating Redis for performance optimization.
 
-Don't forget that the proper way to submit your work is to fork the repo and create a PR :wink: ... have fun !!
+### Authentication With Bearer Token
 
-- [Problem](#problem)
-- [Tech Stack](#tech_stack)
-- [Send us your challenge](#send_us_your_challenge)
+To Make Requests To The API, You Need To Authenticate Using A `Bearer Token` Generate With  `ms-users` . Ensure You Have A Valid Access Token Before Making Requests.
 
-# Problem
+### Authentication Headers
 
-Every time a financial transaction is created it must be validated by our anti-fraud microservice and then the same service sends a message back to update the transaction status.
-For now, we have only three transaction statuses:
+Include The Following Header In All Your HTTP Requests:
 
-<ol>
-  <li>pending</li>
-  <li>approved</li>
-  <li>rejected</li>  
-</ol>
-
-Every transaction with a value greater than 1000 should be rejected.
-
-```mermaid
-  flowchart LR
-    Transaction -- Save Transaction with pending Status --> transactionDatabase[(Database)]
-    Transaction --Send transaction Created event--> Anti-Fraud
-    Anti-Fraud -- Send transaction Status Approved event--> Transaction
-    Anti-Fraud -- Send transaction Status Rejected event--> Transaction
-    Transaction -- Update transaction Status event--> transactionDatabase[(Database)]
+```plaintext
+Authorization: Bearer <your-token-here>
 ```
 
-# Tech Stack
+## Microservices
 
-<ol>
-  <li>Node. You can use any framework you want (i.e. Nestjs with an ORM like TypeOrm or Prisma) </li>
-  <li>Any database</li>
-  <li>Kafka</li>    
-</ol>
+- **ms-transaction:** Manages Transactions.
+- **ms-antifraud:** Handles Fraud Detection.
+- **ms-users:** Handles security in requests.
 
-We do provide a `Dockerfile` to help you get started with a dev environment.
+## Challenge Using Following Technologies:
 
-You must have two resources:
+- NestJS
+- Typescript
+- Kafka
+- Kafka UI
+- Postgres
+- Docker
+- DockerHub
+- Dockerfile
+- CI/CD
+- Swagger
+- JWT
+- Redis
+- Graphql
 
-1. Resource to create a transaction that must containt:
 
-```json
+## 1 Initial Proyect
+
+Root Directory `docker-compose.yml` And Run File To Create Docker Containers.
+
+```
+docker-compose up
+```
+
+## 2 Initial Microservices User
+
+Enter To Directory `ms-users` To Install Dependencies And To Start The Server.
+
+```
+npm run install
+npm run start:dev
+```
+
+## 3 Initial Microservices Transaction
+
+Enter To Directory `ms-transaction` To Install Dependencies And To Start The Server.
+
+```
+npm run install
+npm run start:dev
+```
+
+## 4 Initial Microservices Antifraud
+
+Enter To Directory `ms-antifraud` To Install Dependencies And To Start The Server.
+
+```
+npm run install
+npm run start:dev
+```
+
+## Docker Hub
+
+## Images Docker Hub
+
+- **ms-transaction**: [Docker Hub - ms-transaction](https://hub.docker.com/r/rafamandevops/ms-transaction)
+- **ms-antifraud**: [Docker Hub - ms-antifraud](https://hub.docker.com/r/rafamandevops/ms-antifraud)
+- **ms-users**: [Docker Hub - ms-users](https://hub.docker.com/r/rafamandevops/ms-users)
+
+
+# API Documentation
+## Ms Transaction
+
+### Show API Swagger Documentation
+
+```
+GET /docs
+```
+
+### Create Transaction
+```
+POST /transactions
+```
+```
 {
-  "accountExternalIdDebit": "Guid",
-  "accountExternalIdCredit": "Guid",
+  "accountExternalIdDebit": "{{$guid}}",
+  "accountExternalIdCredit": "{{$guid}}",
   "tranferTypeId": 1,
-  "value": 120
+  "value": {{randomFloatValue}}
 }
 ```
 
-2. Resource to retrieve a transaction
 
-```json
+### Get Transaction
+```
+GET /transactions/c9e286f7-0d78-4d16-8e21-a720324b1f50
+```
+```
 {
-  "transactionExternalId": "Guid",
+  "transactionExternalId": "c9e286f7-0d78-4d16-8e21-a720324b1f50",
   "transactionType": {
-    "name": ""
+    "name": 1
   },
   "transactionStatus": {
-    "name": ""
+    "name": "APPROVED"
   },
-  "value": 120,
-  "createdAt": "Date"
+  "value": 298.26,
+  "createdAt": "2024-08-17T02:22:06.182Z"
 }
 ```
-
-## Optional
-
-You can use any approach to store transaction data but you should consider that we may deal with high volume scenarios where we have a huge amount of writes and reads for the same data at the same time. How would you tackle this requirement?
-
-You can use Graphql;
-
-# Send us your challenge
-
-When you finish your challenge, after forking a repository, you **must** open a pull request to our repository. There are no limitations to the implementation, you can follow the programming paradigm, modularization, and style that you feel is the most appropriate solution.
-
-If you have any questions, please let us know.
