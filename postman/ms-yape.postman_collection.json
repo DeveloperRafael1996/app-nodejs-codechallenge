@@ -1,0 +1,272 @@
+{
+	"info": {
+		"_postman_id": "7790d9b3-7b08-480c-86cd-f5df394b23fe",
+		"name": "ms-yape",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "6142204",
+		"_collection_link": "https://maferlenovo.postman.co/workspace/My-Workspace~74510b89-4913-49b9-837f-379c5d00c585/collection/6142204-7790d9b3-7b08-480c-86cd-f5df394b23fe?action=share&source=collection_link&creator=6142204"
+	},
+	"item": [
+		{
+			"name": "transaction",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.variables.set(\"randomFloatValue\", (Math.random() * (2000 - 500) + 10).toFixed(2));",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{yape-token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"accountExternalIdDebit\": \"{{$guid}}\",\n  \"accountExternalIdCredit\": \"{{$guid}}\",\n  \"tranferTypeId\": 1,\n  \"value\": {{randomFloatValue}}\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/transactions",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"transactions"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "user",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.variables.set(\"randomFloatValue\", (Math.random() * (2000 - 500) + 10).toFixed(2));",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"name\": \"Mafer Cayetana\",\n  \"email\": \"mayer.guevara@yape.com\",\n  \"password\": \"Clarita24@@\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/auth/register",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"auth",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "transaction",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.variables.set(\"randomFloatValue\", (Math.random() * (1000 - 10) + 10).toFixed(2));",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{yape-token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": []
+				},
+				"url": {
+					"raw": "http://localhost:3000/transactions/b1b06007-f04e-4c0e-9c78-e52dc356b0d2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"transactions",
+						"b1b06007-f04e-4c0e-9c78-e52dc356b0d2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "login",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.variables.set(\"randomFloatValue\", (Math.random() * (1000 - 10) + 10).toFixed(2));",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var result = pm.response.json(); ",
+							"pm.environment.set(\"yape-token\", result.token);",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"email\": \"mayer.guevara@yape.com\",\n  \"password\": \"Clarita24@@\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/auth/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"auth",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Graphql",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "query { getTransactionsAll { transactionExternalId value } }",
+						"variables": ""
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/graphql",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"graphql"
+					]
+				},
+				"description": "Generated from cURL: curl -X POST http://localhost:3000/graphql \\\n  -H \"Content-Type: application/json\" \\\n  -d '{ \"query\": \"query { getTransactionsAll { transactionExternalId value } }\" }'\n"
+			},
+			"response": []
+		},
+		{
+			"name": "Get Transaction",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "query { getTransactions(transactionExternalId: \"d762c6e7-7a66-4cb2-a8ff-eedc77a0b055\") { transactionExternalId transactionType { name } transactionStatus { name }  value } }",
+						"variables": ""
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/graphql",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"graphql"
+					]
+				},
+				"description": "Generated from cURL: curl -X POST http://localhost:3000/graphql \\\n  -H \"Content-Type: application/json\" \\\n  -d '{ \"query\": \"query { getTransactions(transactionExternalId: \\\"1234\\\") { transactionExternalId value } }\" }'\n"
+			},
+			"response": []
+		}
+	]
+}
